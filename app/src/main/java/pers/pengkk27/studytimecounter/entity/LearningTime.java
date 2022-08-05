@@ -1,6 +1,8 @@
 package pers.pengkk27.studytimecounter.entity;
 
-public class LearningTime {
+import org.litepal.crud.LitePalSupport;
+
+public class LearningTime extends LitePalSupport {
     private int id;
     private long startTime;
     private long endTime;

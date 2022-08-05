@@ -1,8 +1,10 @@
 package pers.pengkk27.studytimecounter.entity;
 
+import org.litepal.crud.LitePalSupport;
+
 import java.util.Date;
 
-public class ActiveTime {
+public class ActiveTime extends LitePalSupport {
 
     private int id;
     private long getUpTime;

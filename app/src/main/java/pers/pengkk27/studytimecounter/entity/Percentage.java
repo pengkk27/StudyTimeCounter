@@ -1,6 +1,8 @@
 package pers.pengkk27.studytimecounter.entity;
 
-public class Percentage {
+import org.litepal.crud.LitePalSupport;
+
+public class Percentage extends LitePalSupport {
     private int id;
     private long date;
     private double percentage;
