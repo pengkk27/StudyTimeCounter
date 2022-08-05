@@ -5,8 +5,9 @@
     <version value="1" />
 
     <list>
-
-
+        <mapping class="pers.pengkk27.studytimecounter.entity.ActiveTime"/>
+        <mapping class="pers.pengkk27.studytimecounter.entity.LearningTime"/>
+        <mapping class="pers.pengkk27.studytimecounter.entity.Percentage"/>
     </list>
 
 </litepal>
