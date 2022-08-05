@@ -4,6 +4,7 @@
     package="pers.pengkk27.studytimecounter">
 
     <application
+        android:name="org.litepal.LitePalApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
