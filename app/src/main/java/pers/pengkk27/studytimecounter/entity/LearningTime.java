@@ -4,8 +4,7 @@ import org.litepal.crud.LitePalSupport;
 
 public class LearningTime extends LitePalSupport {
     private int id;
-    private long startTime;
-    private long endTime;
+    private long learningTime;
     private int isStart;
     private int activeId;
 
@@ -17,20 +16,12 @@ public class LearningTime extends LitePalSupport {
         this.id = id;
     }
 
-    public long getStartTime() {
-        return startTime;
+    public long getLearningTime() {
+        return learningTime;
     }
 
-    public void setStartTime(long startTime) {
-        this.startTime = startTime;
-    }
-
-    public long getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(long endTime) {
-        this.endTime = endTime;
+    public void setLearningTime(long learningTime) {
+        this.learningTime = learningTime;
     }
 
     public int getIsStart() {
@@ -53,8 +44,7 @@ public class LearningTime extends LitePalSupport {
     public String toString() {
         return "LearningTime{" +
                 "id=" + id +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
+                ", learningTime=" + learningTime +
                 ", isStart=" + isStart +
                 ", activeId=" + activeId +
                 '}';
