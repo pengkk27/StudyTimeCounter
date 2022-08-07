@@ -6,6 +6,7 @@ public class Percentage extends LitePalSupport {
     private int id;
     private long date;
     private double percentage;
+    private int activeId;
 
     public int getId() {
         return id;
@@ -31,12 +32,21 @@ public class Percentage extends LitePalSupport {
         this.percentage = percentage;
     }
 
+    public int getActiveId() {
+        return activeId;
+    }
+
+    public void setActiveId(int activeId) {
+        this.activeId = activeId;
+    }
+
     @Override
     public String toString() {
         return "Percentage{" +
                 "id=" + id +
                 ", date=" + date +
                 ", percentage=" + percentage +
+                ", activeId=" + activeId +
                 '}';
     }
 }

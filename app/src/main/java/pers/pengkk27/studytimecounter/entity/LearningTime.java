@@ -7,6 +7,7 @@ public class LearningTime extends LitePalSupport {
     private long startTime;
     private long endTime;
     private int isStart;
+    private int activeId;
 
     public int getId() {
         return id;
@@ -40,6 +41,14 @@ public class LearningTime extends LitePalSupport {
         this.isStart = isStart;
     }
 
+    public int getActiveId() {
+        return activeId;
+    }
+
+    public void setActiveId(int activeId) {
+        this.activeId = activeId;
+    }
+
     @Override
     public String toString() {
         return "LearningTime{" +
@@ -47,6 +56,7 @@ public class LearningTime extends LitePalSupport {
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 ", isStart=" + isStart +
+                ", activeId=" + activeId +
                 '}';
     }
 }
