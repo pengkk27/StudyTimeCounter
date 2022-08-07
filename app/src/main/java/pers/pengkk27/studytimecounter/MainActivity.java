@@ -16,7 +16,7 @@ import java.util.List;
 import pers.pengkk27.studytimecounter.entity.ActiveTime;
 import pers.pengkk27.studytimecounter.entity.LearningTime;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
 
     private TextView getup_time_yesterday;
     private TextView sleep_time_yesterday;
@@ -56,6 +56,53 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sleep = findViewById(R.id.sleep);
         learning = findViewById(R.id.learning);
 
+        init();
+
+        getUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActiveTime activeTime = new ActiveTime();
+                activeTime.setId(200);
+                activeTime.setGetUpTime(System.currentTimeMillis());
+                activeTime.setSleepTime(0);
+                activeTime.setActiveTime(0);
+                activeTime.save();
+
+                LearningTime learningTime = new LearningTime();
+                learningTime.setId(200);
+                learningTime.setActiveId(200);
+                learningTime.setStartTime(0);
+                learningTime.setIsStart(1);
+                learningTime.setLearningTime(0);
+            }
+        });
+
+        sleep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActiveTime activeTime = LitePal.find(ActiveTime.class, 200);
+                long sleepTime = System.currentTimeMillis();
+                activeTime.setSleepTime(sleepTime);
+                activeTime.setActiveTime(sleepTime - activeTime.getGetUpTime());
+                activeTime.save();
+            }
+        });
+
+        learning.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LearningTime learningTimeToDay = LitePal.find(LearningTime.class, 200);
+                if (learningTimeToDay.getIsStart() == 1) {
+                    learningTimeToDay.setIsStart(2);
+                    learningTimeToDay.setStartTime(System.currentTimeMillis());
+                } else {
+                    learningTimeToDay.setIsStart(1);
+                    learningTimeToDay.setLearningTime(System.currentTimeMillis() - learningTimeToDay.getStartTime());
+                    learningTimeToDay.setStartTime(0);
+                }
+                learningTimeToDay.save();
+            }
+        });
     }
 
     /**
@@ -64,23 +111,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void init() {
         // 查询昨天的起床时间，若查找不到，则后面的数据全部为“未记录”
-        ActiveTime yesterdayGetUp = LitePal.find(ActiveTime.class, 100);
-        if (yesterdayGetUp == null) {
+        List<ActiveTime> yesterdayGetUps = LitePal.where("id = ?", "100").find(ActiveTime.class);
+        if (yesterdayGetUps == null || yesterdayGetUps.size() == 0) {
             getup_time_yesterday.setText("未记录");
             sleep_time_yesterday.setText("未记录");
             learning_time_yesterday.setText("未记录");
             active_time_yesterday.setText("未记录");
             percentage_time_yesterday.setText("未记录");
+        } else {
+            ActiveTime yesterdayGetUp = yesterdayGetUps.get(0);
+
+            LearningTime learningTimeYest = LitePal.where("activeId = ?", "100").find(LearningTime.class).get(0);
+
+            getup_time_yesterday.setText(timeChange(yesterdayGetUp.getGetUpTime()));
+            sleep_time_yesterday.setText(timeChange(yesterdayGetUp.getSleepTime()));
+            learning_time_yesterday.setText(countTime(learningTimeYest.getLearningTime()));
+            active_time_today.setText(countTime(yesterdayGetUp.getGetUpTime(), yesterdayGetUp.getSleepTime()));
+            percentage_time_yesterday.setText(countPercentage(yesterdayGetUp.getActiveTime(), learningTimeYest.getLearningTime()));
         }
-
-        LearningTime learningTimeYest = LitePal.where("activeId = ?", "100").find(LearningTime.class).get(0);
-
-        getup_time_yesterday.setText(timeChange(yesterdayGetUp.getGetUpTime()));
-        sleep_time_yesterday.setText(timeChange(yesterdayGetUp.getSleepTime()));
-        learning_time_yesterday.setText(countTime(learningTimeYest.getLearningTime()));
-        active_time_today.setText(countTime(yesterdayGetUp.getGetUpTime(), yesterdayGetUp.getSleepTime()));
-        percentage_time_yesterday.setText(countPercentage(yesterdayGetUp.getActiveTime(), learningTimeYest.getLearningTime()));
-
         /*------------------------------------------------------------------------------------------------*/
 
         ActiveTime todayGetUp = LitePal.find(ActiveTime.class, 200);
@@ -90,16 +138,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             learning_time_today.setText("未记录");
             active_time_today.setText("未记录");
             percentage_time_today.setText("未记录");
+        } else {
+
+            LearningTime learningTimeToDay = LitePal.find(LearningTime.class, 200);
+
+            getup_time_today.setText(timeChange(todayGetUp.getGetUpTime()));
+            sleep_time_today.setText(timeChange(todayGetUp.getSleepTime()));
+            if (learningTimeToDay.getLearningTime() == 0) {
+                learning_time_today.setText("未记录");
+            } else {
+                learning_time_today.setText(countTime(learningTimeToDay.getLearningTime()));
+            }
+            active_time_today.setText(countTime(todayGetUp.getGetUpTime(), System.currentTimeMillis()));
+            percentage_time_today.setText(countPercentage(todayGetUp.getActiveTime(), learningTimeToDay.getLearningTime()));
         }
+    }
 
+    private void initDatabase() {
 
-        LearningTime learningTimeToDay = LitePal.where("activeId = ?", "200").find(LearningTime.class).get(0);
-
-        getup_time_today.setText(timeChange(todayGetUp.getGetUpTime()));
-        sleep_time_today.setText(timeChange(todayGetUp.getSleepTime()));
-        learning_time_today.setText(countTime(learningTimeToDay.getLearningTime()));
-        active_time_today.setText(countTime(todayGetUp.getGetUpTime(), todayGetUp.getSleepTime()));
-        percentage_time_today.setText(countPercentage(todayGetUp.getActiveTime(), learningTimeToDay.getLearningTime()));
     }
 
     /**
@@ -132,11 +188,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return (new Double(percentage * 100).toString()) + "%";
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-
-        }
-    }
 
 }
