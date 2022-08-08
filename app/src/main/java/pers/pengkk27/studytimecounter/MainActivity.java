@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         if (activeTime == 0) {
             percentage_time.setText("0%");
         } else {
-            int percentage =(int) (learning * 1.0 / activeTime) * 100;
+            int percentage =(int) ((learning * 1.0 / activeTime) * 100);
             percentage_time.setText( percentage + "%");
         }
     }
