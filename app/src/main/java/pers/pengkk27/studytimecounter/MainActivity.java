@@ -98,16 +98,20 @@ public class MainActivity extends AppCompatActivity {
         if (getUp == null || getUp.length() == 0 || getUp.equals("未记录")) {
             active_time.setText("未记录");
         } else {
-            String currentTime = getCurrentTime(System.currentTimeMillis());
-            activeTime = countTimeBetween(getUp, currentTime);
+            if (sleep != null && sleep.length() != 0 && !"未记录".equals(sleep)) {
+                activeTime = countTimeBetween(getUp, sleep);
+            } else {
+                String currentTime = getCurrentTime(System.currentTimeMillis());
+                activeTime = countTimeBetween(getUp, currentTime);
+            }
             active_time.setText(activeTime + "分钟");
         }
 
         if (activeTime == 0) {
             percentage_time.setText("0%");
         } else {
-            int percentage =(int) ((learning * 1.0 / activeTime) * 100);
-            percentage_time.setText( percentage + "%");
+            int percentage = (int) ((learning * 1.0 / activeTime) * 100);
+            percentage_time.setText(percentage + "%");
         }
     }
 
