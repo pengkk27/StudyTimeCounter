@@ -10,7 +10,7 @@ android {
         minSdk 29
         targetSdk 32
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -25,7 +25,20 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def date = new Date().format("yyyy_MM_dd", TimeZone.getTimeZone("GMT+08"))
+            if (variant.buildType.name == "debug") {
+                output.outputFileName = "学习时间比计算器_${date}_v${android.defaultConfig.versionName}_debug_${android.defaultConfig.versionCode}.apk"
+            } else if (variant.buildType.name == "release") {
+                output.outputFileName = "学习时间比计算器_v${android.defaultConfig.versionName}.apk"
+            }
+        }
+    }
 }
+
+
 
 dependencies {
     implementation 'org.apache.commons:commons-lang3:3.12.0'
