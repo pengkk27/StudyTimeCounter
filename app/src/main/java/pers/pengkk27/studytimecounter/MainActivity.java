@@ -26,11 +26,16 @@ public class MainActivity extends AppCompatActivity {
     private TextView learning_time;
     private TextView active_time;
     private TextView percentage_time;
+    private TextView start_learning_time;
+    private TextView end_learning_time;
 
     private Button getUp;
     private Button sleep;
     private Button learning;
     private Button clear;
+    private Button start_learning_time_button;
+    private Button end_learning_time_button;
+    private Button clear_time_record;
 
     GetUp getupClick;
     Sleep sleepClick;
@@ -52,41 +57,50 @@ public class MainActivity extends AppCompatActivity {
         learning_time = findViewById(R.id.learning_time);
         active_time = findViewById(R.id.active_time);
         percentage_time = findViewById(R.id.percentage_time);
+        start_learning_time = findViewById(R.id.start_learning_time);
+        end_learning_time = findViewById(R.id.end_learning_time);
 
         getUp = findViewById(R.id.getup);
         sleep = findViewById(R.id.sleep);
         learning = findViewById(R.id.learning);
         clear = findViewById(R.id.clear);
+        start_learning_time_button = findViewById(R.id.start_learning_time_button);
+        end_learning_time_button = findViewById(R.id.end_learning_time_button);
+        clear_time_record = findViewById(R.id.clear_time_record);
 
         timeUtil = new TimeUtil();
 
         initData();
+        initTimeRecord();
 
-        getUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showGetUpInput(v);
-            }
+        start_learning_time_button.setOnClickListener(v -> {
+            String currentTime = timeUtil.getCurrentTime(System.currentTimeMillis());
+            editor.putString("start_learning_time", currentTime);
+            editor.apply();
+            start_learning_time.setText(currentTime);
         });
-        sleep.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showSleepInput(v);
-            }
+        end_learning_time_button.setOnClickListener(v -> {
+            String currentTime = timeUtil.getCurrentTime(System.currentTimeMillis());
+            editor.putString("end_learning_time", currentTime);
+            editor.apply();
+            end_learning_time.setText(currentTime);
         });
-        learning.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showLearnInput(v);
-            }
+
+        clear_time_record.setOnClickListener(v -> {
+            editor.putString("start_learning_time", "未记录");
+            editor.putString("end_learning_time", "未记录");
+            editor.apply();
+            initTimeRecord();
         });
-        clear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editor.clear();
-                editor.apply();
-                initData();
-            }
+        
+        getUp.setOnClickListener(this::showGetUpInput);
+        sleep.setOnClickListener(this::showSleepInput);
+        learning.setOnClickListener(this::showLearnInput);
+
+        clear.setOnClickListener(v -> {
+            editor.clear();
+            editor.apply();
+            initData();
         });
     }
 
@@ -108,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
             if (sleep != null && sleep.length() != 0 && !"未记录".equals(sleep)) {
                 activeTime = timeUtil.countTimeBetween(getUp, sleep);
             } else {
-                String currentTime = getCurrentTime(System.currentTimeMillis());
+                String currentTime = timeUtil.getCurrentTime(System.currentTimeMillis());
                 activeTime = timeUtil.countTimeBetween(getUp, currentTime);
             }
             active_time.setText(activeTime + "分钟");
@@ -120,6 +134,13 @@ public class MainActivity extends AppCompatActivity {
             int percentage = (int) ((learning * 1.0 / activeTime) * 100);
             percentage_time.setText(percentage + "%");
         }
+    }
+
+    private void initTimeRecord() {
+        String startLearningTime = share.getString("start_learning_time", "未记录");
+        String endLearningTime = share.getString("end_learning_time", "未记录");
+        start_learning_time.setText(startLearningTime);
+        end_learning_time.setText(endLearningTime);
     }
 
     public void showGetUpInput(View view) {
@@ -185,11 +206,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    public String getCurrentTime(long currentTime) {
-        String time = new Date(currentTime).toString();
-        String[] times = time.split(" ");
-        String hour = times[3].split(":")[0] + ":" + times[3].split(":")[1];
-        return hour;
-    }
+
 
 }

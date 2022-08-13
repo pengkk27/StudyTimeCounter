@@ -3,6 +3,8 @@ package pers.pengkk27.studytimecounter.utils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Date;
+
 /**
  * @author pengkk27
  * <p>
@@ -21,12 +23,12 @@ public class TimeUtil {
         }
 
         // 判断是否为一个时刻
-        if (!timeString.contains(":") || !timeString.contains("：")) {
+        if (!timeString.contains(":")) {
             return false;
         }
 
         // 拆分分号左右两边的数字
-        String[] timeList = timeString.split("[:|：]");
+        String[] timeList = timeString.split(":");
         if (ObjectUtils.isEmpty(timeList) || timeList.length < 2) {
             return false;
         }
@@ -51,8 +53,9 @@ public class TimeUtil {
 
     /**
      * 判断两个时间段是否合理
+     *
      * @param startTime 开始时间
-     * @param endTime 结束时间
+     * @param endTime   结束时间
      */
     public boolean adjustTime(String startTime, String endTime) {
         if (!adjustTime(startTime) || !adjustTime(endTime)) {
@@ -68,15 +71,26 @@ public class TimeUtil {
 
     /**
      * 计算两个时刻之间的时间（分钟）
+     *
      * @param time1 开始时间
      * @param time2 结束时间
      * @return 时刻之间的时间
      */
     public int countTimeBetween(String time1, String time2) {
-        String[] time1List = time1.split("[:|：]");
-        String[] time2List = time2.split("[:|：]");
+        String[] time1List = time1.split(":");
+        String[] time2List = time2.split(":");
         int start = Integer.parseInt(time1List[0]) * 60 + Integer.parseInt(time1List[1]);
         int end = Integer.parseInt(time2List[0]) * 60 + Integer.parseInt(time2List[1]);
         return end - start;
+    }
+
+    /**
+     * 获取当前时间
+     */
+    public String getCurrentTime(long currentTime) {
+        String time = new Date(currentTime).toString();
+        String[] times = time.split(" ");
+        String hour = times[3].split(":")[0] + ":" + times[3].split(":")[1];
+        return hour;
     }
 }

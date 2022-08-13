@@ -9,4 +9,6 @@
     <string name="remember_start_time">记录开始时间</string>
     <string name="remember_end_time">记录结束时间</string>
     <string name="hint">记录和填写的时间均使用24小时制</string>
+    <string name="without_record">未记录</string>
+    <string name="clear_data">清除数据</string>
 </resources>
