@@ -7,12 +7,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Date;
 
 import pers.pengkk27.studytimecounter.pop.GetUp;
 import pers.pengkk27.studytimecounter.pop.Learning;
 import pers.pengkk27.studytimecounter.pop.Sleep;
+import pers.pengkk27.studytimecounter.utils.TimeUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     Sleep sleepClick;
     Learning learningClick;
 
+    private TimeUtil timeUtil;
 
 
     @Override
@@ -54,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
         sleep = findViewById(R.id.sleep);
         learning = findViewById(R.id.learning);
         clear = findViewById(R.id.clear);
+
+        timeUtil = new TimeUtil();
 
         initData();
 
@@ -101,10 +106,10 @@ public class MainActivity extends AppCompatActivity {
             active_time.setText("未记录");
         } else {
             if (sleep != null && sleep.length() != 0 && !"未记录".equals(sleep)) {
-                activeTime = countTimeBetween(getUp, sleep);
+                activeTime = timeUtil.countTimeBetween(getUp, sleep);
             } else {
                 String currentTime = getCurrentTime(System.currentTimeMillis());
-                activeTime = countTimeBetween(getUp, currentTime);
+                activeTime = timeUtil.countTimeBetween(getUp, currentTime);
             }
             active_time.setText(activeTime + "分钟");
         }
@@ -139,6 +144,11 @@ public class MainActivity extends AppCompatActivity {
             switch (v.getId()) {
                 case R.id.getup_btn_save_pop:
                     String getUpTime = getupClick.getup_time_pop.getText().toString().trim();
+                    if (!timeUtil.adjustTime(getUpTime)) {
+                        getupClick.hide();
+                        Toast.makeText(MainActivity.this, "输入时间有问题，请重新输入", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
                     editor.putString("getUp", getUpTime);
                     editor.apply();
                     getupClick.hide();
@@ -146,6 +156,11 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.sleep_btn_save_pop:
                     String sleepTime = sleepClick.sleep_time_pop.getText().toString().trim();
+                    if (!timeUtil.adjustTime(sleepTime)) {
+                        sleepClick.hide();
+                        Toast.makeText(MainActivity.this, "输入时间有问题，请重新输入", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
                     editor.putString("sleep", sleepTime);
                     editor.apply();
                     sleepClick.hide();
@@ -154,8 +169,12 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.learning_btn_save_pop:
                     String startLearningTime = learningClick.start_learning_time_pop.getText().toString().trim();
                     String endLearningTime = learningClick.end_learning_time_pop.getText().toString().trim();
-
-                    int totalTime = share.getInt("learning_time", 0) + countTimeBetween(startLearningTime, endLearningTime);
+                    if (!timeUtil.adjustTime(startLearningTime, endLearningTime)) {
+                        learningClick.hide();
+                        Toast.makeText(MainActivity.this, "输入时间有问题，请重新输入", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                    int totalTime = share.getInt("learning_time", 0) + timeUtil.countTimeBetween(startLearningTime, endLearningTime);
 
                     editor.putInt("learning_time", totalTime);
                     editor.apply();
@@ -165,14 +184,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-
-    public int countTimeBetween(String time1, String time2) {
-        String[] time1List = time1.split("[:|：]");
-        String[] time2List = time2.split("[:|：]");
-        int start = Integer.parseInt(time1List[0]) * 60 + Integer.parseInt(time1List[1]);
-        int end = Integer.parseInt(time2List[0]) * 60 + Integer.parseInt(time2List[1]);
-        return end - start;
-    }
 
     public String getCurrentTime(long currentTime) {
         String time = new Date(currentTime).toString();

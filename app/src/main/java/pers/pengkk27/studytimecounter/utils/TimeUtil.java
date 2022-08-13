@@ -49,5 +49,34 @@ public class TimeUtil {
         return true;
     }
 
+    /**
+     * 判断两个时间段是否合理
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     */
+    public boolean adjustTime(String startTime, String endTime) {
+        if (!adjustTime(startTime) || !adjustTime(endTime)) {
+            return false;
+        }
 
+        if (countTimeBetween(startTime, endTime) < 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * 计算两个时刻之间的时间（分钟）
+     * @param time1 开始时间
+     * @param time2 结束时间
+     * @return 时刻之间的时间
+     */
+    public int countTimeBetween(String time1, String time2) {
+        String[] time1List = time1.split("[:|：]");
+        String[] time2List = time2.split("[:|：]");
+        int start = Integer.parseInt(time1List[0]) * 60 + Integer.parseInt(time1List[1]);
+        int end = Integer.parseInt(time2List[0]) * 60 + Integer.parseInt(time2List[1]);
+        return end - start;
+    }
 }
