@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">学习时间比计算器</string>
+    <string name="get_up_time">起床时刻</string>
+    <string name="learning_time">学习时间</string>
+    <string name="sleep_time">睡觉时刻</string>
+    <string name="active_time">活动时长</string>
+    <string name="learning_time_ratio">学习时间占比</string>
 </resources>
