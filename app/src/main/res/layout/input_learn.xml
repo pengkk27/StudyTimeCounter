@@ -9,7 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="开始学习"
-        android:maxLines="1"
+        android:singleLine="true"
         android:minHeight="45dp"
         android:textSize="18sp" />
 
@@ -17,7 +17,7 @@
         android:id="@+id/end_learning_time_pop"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:maxLines="1"
+        android:singleLine="true"
         android:hint="结束学习"
         android:minHeight="45dp"
         android:textSize="18sp" />
