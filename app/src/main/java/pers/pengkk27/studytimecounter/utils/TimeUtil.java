@@ -36,8 +36,8 @@ public class TimeUtil {
         int hour;
         int minute;
         try {
-            hour = Integer.parseInt(timeList[0]);
-            minute = Integer.parseInt(timeList[1]);
+            hour = Integer.parseInt(timeList[0].trim());
+            minute = Integer.parseInt(timeList[1].trim());
         } catch (NumberFormatException e) {
             return false;
         }
