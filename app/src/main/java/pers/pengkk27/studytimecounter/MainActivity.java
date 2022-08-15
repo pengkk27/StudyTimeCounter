@@ -1,5 +1,6 @@
 package pers.pengkk27.studytimecounter;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
@@ -8,8 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.Date;
 
 import pers.pengkk27.studytimecounter.pop.GetUp;
 import pers.pengkk27.studytimecounter.pop.Learning;
@@ -69,6 +68,9 @@ public class MainActivity extends AppCompatActivity {
         clear_time_record = findViewById(R.id.clear_time_record);
 
         timeUtil = new TimeUtil();
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
         initData();
         initTimeRecord();
