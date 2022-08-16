@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private Button end_learning_time_button;
     private Button clear_time_record;
 
+
     GetUp getupClick;
     Sleep sleepClick;
     Learning learningClick;
@@ -66,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
         start_learning_time_button = findViewById(R.id.start_learning_time_button);
         end_learning_time_button = findViewById(R.id.end_learning_time_button);
         clear_time_record = findViewById(R.id.clear_time_record);
+
+
 
         timeUtil = new TimeUtil();
 
